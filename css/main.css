@@ -6,6 +6,12 @@
   font-size: 4rem;
 }
 
+.call-to-action {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('../images/work.jpg');
+  background-position: center;
+}
+
 /* #main-wrapper {
   margin-top: 5px;
 } */
