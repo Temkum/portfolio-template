@@ -53,9 +53,9 @@ Static slide 4
   line-height: 50px;
 }
 
-.static-slider4 h1 span {
+/* .static-slider4 h1 span {
   border-bottom: 3px solid #188ef4;
-}
+} */
 
 .static-slider4 .info-box {
   padding: 25px 15px;
