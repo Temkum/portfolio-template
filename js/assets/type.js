@@ -1,56 +1,128 @@
-var TxtType = function(el, toRotate, period) {
-        this.toRotate = toRotate;
-        this.el = el;
-        this.loopNum = 0;
-        this.period = parseInt(period, 10) || 2000;
-        this.txt = '';
-        this.tick();
-        this.isDeleting = false;
-    };
+var Typer = function (element) {
+  this.element = element;
+  var delim = element.dataset.delim || ",";
+  var words = element.dataset.words || "override these,sample typing";
+  this.words = words.split(delim).filter((v) => v); // non empty words
+  this.delay = element.dataset.delay || 200;
+  this.loop = element.dataset.loop || "true";
+  if (this.loop === "false") {
+    this.loop = 1;
+  }
+  this.deleteDelay =
+    element.dataset.deletedelay || element.dataset.deleteDelay || 800;
 
-    TxtType.prototype.tick = function() {
-        var i = this.loopNum % this.toRotate.length;
-        var fullTxt = this.toRotate[i];
+  this.progress = { word: 0, char: 0, building: true, looped: 0 };
+  this.typing = true;
 
-        if (this.isDeleting) {
-        this.txt = fullTxt.substring(0, this.txt.length - 1);
-        } else {
-        this.txt = fullTxt.substring(0, this.txt.length + 1);
-        }
+  var colors = element.dataset.colors || "black";
+  this.colors = colors.split(",");
+  this.element.style.color = this.colors[0];
+  this.colorIndex = 0;
 
-        this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+  this.doTyping();
+};
 
-        var that = this;
-        var delta = 200 - Math.random() * 100;
+Typer.prototype.start = function () {
+  if (!this.typing) {
+    this.typing = true;
+    this.doTyping();
+  }
+};
+Typer.prototype.stop = function () {
+  this.typing = false;
+};
+Typer.prototype.doTyping = function () {
+  var e = this.element;
+  var p = this.progress;
+  var w = p.word;
+  var c = p.char;
+  var currentDisplay = [...this.words[w]].slice(0, c).join("");
+  var atWordEnd;
+  if (this.cursor) {
+    this.cursor.element.style.opacity = "1";
+    this.cursor.on = true;
+    clearInterval(this.cursor.interval);
+    this.cursor.interval = setInterval(
+      () => this.cursor.updateBlinkState(),
+      400
+    );
+  }
 
-        if (this.isDeleting) { delta /= 2; }
+  e.innerHTML = currentDisplay;
 
-        if (!this.isDeleting && this.txt === fullTxt) {
-        delta = this.period;
-        this.isDeleting = true;
-        } else if (this.isDeleting && this.txt === '') {
-        this.isDeleting = false;
-        this.loopNum++;
-        delta = 500;
-        }
+  if (p.building) {
+    atWordEnd = p.char === this.words[w].length;
+    if (atWordEnd) {
+      p.building = false;
+    } else {
+      p.char += 1;
+    }
+  } else {
+    if (p.char === 0) {
+      p.building = true;
+      p.word = (p.word + 1) % this.words.length;
+      this.colorIndex = (this.colorIndex + 1) % this.colors.length;
+      this.element.style.color = this.colors[this.colorIndex];
+    } else {
+      p.char -= 1;
+    }
+  }
 
-        setTimeout(function() {
-        that.tick();
-        }, delta);
-    };
+  if (p.word === this.words.length - 1) {
+    p.looped += 1;
+  }
 
-    window.onload = function() {
-        var elements = document.getElementsByClassName('typewrite');
-        for (var i=0; i<elements.length; i++) {
-            var toRotate = elements[i].getAttribute('data-type');
-            var period = elements[i].getAttribute('data-period');
-            if (toRotate) {
-              new TxtType(elements[i], JSON.parse(toRotate), period);
-            }
-        }
-        // INJECT CSS
-        var css = document.createElement("style");
-        css.type = "text/css";
-        css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid transparent}";
-        document.body.appendChild(css);
-    };
+  if (!p.building && this.loop <= p.looped) {
+    this.typing = false;
+  }
+
+  setTimeout(
+    () => {
+      if (this.typing) {
+        this.doTyping();
+      }
+    },
+    atWordEnd ? this.deleteDelay : this.delay
+  );
+};
+
+var Cursor = function (element) {
+  this.element = element;
+  this.cursorDisplay =
+    element.dataset.cursordisplay || element.dataset.cursorDisplay || "_";
+  element.innerHTML = this.cursorDisplay;
+  this.on = true;
+  element.style.transition = "all 0.1s";
+  this.interval = setInterval(() => this.updateBlinkState(), 400);
+};
+Cursor.prototype.updateBlinkState = function () {
+  if (this.on) {
+    this.element.style.opacity = "0";
+    this.on = false;
+  } else {
+    this.element.style.opacity = "1";
+    this.on = true;
+  }
+};
+
+function TyperSetup() {
+  var typers = {};
+  for (let e of document.getElementsByClassName("typer")) {
+    typers[e.id] = new Typer(e);
+  }
+  for (let e of document.getElementsByClassName("typer-stop")) {
+    let owner = typers[e.dataset.owner];
+    e.onclick = () => owner.stop();
+  }
+  for (let e of document.getElementsByClassName("typer-start")) {
+    let owner = typers[e.dataset.owner];
+    e.onclick = () => owner.start();
+  }
+  for (let e of document.getElementsByClassName("cursor")) {
+    let t = new Cursor(e);
+    t.owner = typers[e.dataset.owner];
+    t.owner.cursor = t;
+  }
+}
+
+TyperSetup();
