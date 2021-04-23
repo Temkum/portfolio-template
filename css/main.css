@@ -28,9 +28,3 @@
     color: white;
   }
 }
-
-@media (max-width: 425px) {
-  .col-md-4 {
-    background-color: red;
-  }
-}
