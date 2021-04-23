@@ -42,6 +42,12 @@
   background: linear-gradient(to right, #ff6a5b 0%, #ff4d7e 100%);
 }
 
+.card-img {
+  background-image: url('/images/contact.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 @media (min-width:1023px) {
   .contact3 {
     margin-top: 3rem;
