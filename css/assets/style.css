@@ -1,26 +1,8 @@
-/**
- * Table Of Content
- *
- * 	1. Globals
- *	2. Headers
- *	3. Navigations
- *	4. Banners
- *	5. Footers
- *	6. app
- *	7. Widgets 
- *	8. Custom Templates
- */
-/*!
- * Bootstrap v4.5.2 (https://getbootstrap.com/)
- * Copyright 2011-2020 The Bootstrap Authors
- * Copyright 2011-2020 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
-@import url(css/assets/animate.css);
-@import url(css/assets/font-awesome.min.css);
-@import url(css/assets/simple-line-icons.css);
-@import url(css/assets/iconmind/iconmind.css);
-@import url(css/assets/themify-icons.css);
+/* @import url('css/assets/animate.css');
+@import url('css/assets/font-awesome.min.css');
+@import url('css/assets/simple-line-icons.css');
+@import url('css/assets/iconmind/iconmind.css');
+@import url('css/assets/themify-icons.css'); */
 @import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800");
 
 :root {
@@ -14296,12 +14278,6 @@ icons path
   src: url("fonts/fontawesome-webfont.ttf?v=4.7.0") format("truetype");
 }
 
-/*
-Template Name: Wrapkit Ui Kit
-Author: Themedesigner
-Email: niravjoshi87@gmail.com
-File: scss
-*/
 /*============================================================== 
  For Laptop & above all (1650px) 
  ============================================================== */

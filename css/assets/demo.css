@@ -1,25 +1,3 @@
-/*
-Template Name: Wrapkit
-Author: Wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*
-Template Name: Wrapkit
-Author: wrappixel
-Email: niravjoshi87@gmail.com
-File: scss
-*/
-/*Theme Colors*/
-/*bootstrap Color*/
-/*Light colors*/
-/*Normal Color*/
-/*Extra Variable*/
-/*Gradiant*/
-/*============================================================== 
- This scss/css we made it from our predefine componenet 
- we just copy that css and paste here you can also do that
- ============================================================== */
 /*******************
 Header 1
 *******************/
@@ -80,6 +58,10 @@ Static slide 4
 
   .static-slider4 .bg-info-gradiant {
     margin-top: 40px;
+  }
+
+  .static-slider4 h1 span {
+    font-size: 2rem;
   }
 }
 
